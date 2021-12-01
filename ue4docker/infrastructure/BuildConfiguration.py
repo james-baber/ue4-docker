@@ -14,17 +14,18 @@ DEFAULT_GIT_REPO = "https://github.com/EpicGames/UnrealEngine.git"
 
 # The base images for Linux containers
 LINUX_BASE_IMAGES = {
-    "opengl": "nvidia/opengl:1.0-glvnd-devel-ubuntu18.04",
+    "opengl": "nvidia/opengl:1.2-glvnd-devel-ubuntu20.04",
     "cudagl": {
         "9.2": "nvidia/cudagl:9.2-devel-ubuntu18.04",
         "10.0": "nvidia/cudagl:10.0-devel-ubuntu18.04",
         "10.1": "nvidia/cudagl:10.1-devel-ubuntu18.04",
         "10.2": "nvidia/cudagl:10.2-devel-ubuntu18.04",
+        "11.2.2": "nvidia/cudagl:11.2.2-runtime-ubuntu20.04",
     },
 }
 
 # The default CUDA version to use when `--cuda` is specified without a value
-DEFAULT_CUDA_VERSION = "9.2"
+DEFAULT_CUDA_VERSION = "11.2.2"
 
 # The default memory limit (in GB) under Windows
 DEFAULT_MEMORY_LIMIT = 10.0
@@ -285,17 +286,14 @@ class BuildConfiguration(object):
             # Validate the specified version string
             try:
                 ue4Version = semver.parse(self.args.release)
-                if (
-                    ue4Version["major"] not in [4, 5]
-                    or ue4Version["prerelease"] != None
-                ):
+                if ue4Version["major"] != 4 or ue4Version["prerelease"] != None:
                     raise Exception()
                 self.release = semver.format_version(
                     ue4Version["major"], ue4Version["minor"], ue4Version["patch"]
                 )
             except:
                 raise RuntimeError(
-                    'invalid Unreal Engine release number "{}", full semver format required (e.g. "4.20.0")'.format(
+                    'invalid UE4 release number "{}", full semver format required (e.g. "4.20.0")'.format(
                         self.args.release
                     )
                 )

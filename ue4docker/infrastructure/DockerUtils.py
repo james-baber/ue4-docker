@@ -1,6 +1,4 @@
 import docker, fnmatch, humanfriendly, itertools, json, logging, os, platform, re
-from docker.models.containers import Container
-
 from .FilesystemUtils import FilesystemUtils
 
 
@@ -86,14 +84,6 @@ class DockerUtils(object):
         """
         client = docker.from_env()
         return client.containers.run(image, command, detach=True, **kwargs)
-
-    @staticmethod
-    def create(image: str, **kwargs) -> Container:
-        """
-        Creates a stopped container for specified image name and returns the container handle
-        """
-        client = docker.from_env()
-        return client.containers.create(image, **kwargs)
 
     @staticmethod
     def configFilePath():
